@@ -3,8 +3,11 @@
 A secure and feature-rich Student Management REST API built with **Java**, **Spring Boot**, **MySQL**, and **JWT Authentication**. Designed for coaching centers to manage students, courses, and fee tracking efficiently.
 
 🌐 **Live API:** https://student-management-backend-production-98f6.up.railway.app
+
 📖 **Swagger Docs:** https://student-management-backend-production-98f6.up.railway.app/swagger-ui/index.html
+
 🖥️ **Frontend:** https://student-management-system-ui.netlify.app
+
 💻 **GitHub:** https://github.com/pratikdjadhav
 
 ---
@@ -19,10 +22,6 @@ A secure and feature-rich Student Management REST API built with **Java**, **Spr
 | Spring Data JPA | Database ORM |
 | Hibernate | JPA Implementation |
 | MySQL | Relational Database |
-| Spring Security | Authentication & Authorization |
-| JWT (jjwt 0.11.5) | Stateless Token Authentication |
-| BCrypt | Password Encryption |
-| Swagger / OpenAPI | API Documentation |
 | Lombok | Reduce Boilerplate Code |
 | Maven | Build Tool |
 | Railway | Cloud Deployment |
