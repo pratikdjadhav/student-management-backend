@@ -11,13 +11,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    @Lazy
     private final PasswordEncoder passwordEncoder;
+
+    public UserDetailsServiceImpl(
+            UserRepository userRepository,
+            @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     public void registerUser(String username, String email, String password) {
         if (userRepository.existsByUsername(username)) {
