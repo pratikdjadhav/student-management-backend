@@ -1,42 +1,48 @@
 package dev.pratik.studentmanagement.security;
 
+import dev.pratik.studentmanagement.model.User;
+import dev.pratik.studentmanagement.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    private final UserRepository userRepository;
+
+    @Lazy
     private final PasswordEncoder passwordEncoder;
-    private final Map<String, String> users = new HashMap<>();
 
-    public UserDetailsServiceImpl(@Lazy PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public void registerUser(String username, String password) {
-        if (users.containsKey(username)) {
-            throw new RuntimeException("User already exists!");
+    public void registerUser(String username, String email, String password) {
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("Username already exists!");
         }
-        users.put(username, passwordEncoder.encode(password));
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email already exists!");
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        String password = users.get(username);
-        if (password == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
-        }
-        return User.builder()
-                .username(username)
-                .password(password)
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User not found: " + username));
+        return org.springframework.security.core.userdetails.User
+                .builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
                 .roles("USER")
                 .build();
     }
