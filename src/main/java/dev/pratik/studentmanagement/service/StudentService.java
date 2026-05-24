@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,6 +74,17 @@ public class StudentService {
         if (studentRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists!");
         }
+
+
+        if (request.getCourseId() != null && request.getPaidFees() != null) {
+            Course course = courseService.getCourseById(request.getCourseId());
+            if (request.getPaidFees() > course.getFees()) {
+                throw new RuntimeException(
+                        "Paid fees cannot be more than course fees of ₹"
+                                + course.getFees());
+            }
+        }
+
         Student student = mapToEntity(request);
         return mapToResponse(studentRepository.save(student));
     }
@@ -119,6 +131,14 @@ public class StudentService {
         if (request.getCourseId() != null) {
             Course course = courseService.getCourseById(request.getCourseId());
             existing.setCourse(course);
+        }
+        if (request.getCourseId() != null && request.getPaidFees() != null) {
+            Course course = courseService.getCourseById(request.getCourseId());
+            if (request.getPaidFees() > course.getFees()) {
+                throw new RuntimeException(
+                        "Paid fees cannot be more than course fees of ₹"
+                                + course.getFees());
+            }
         }
         return mapToResponse(studentRepository.save(existing));
     }

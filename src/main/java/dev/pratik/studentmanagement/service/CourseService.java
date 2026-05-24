@@ -36,6 +36,7 @@ public class CourseService {
         existing.setName(updatedCourse.getName());
         existing.setDuration(updatedCourse.getDuration());
         existing.setDescription(updatedCourse.getDescription());
+        existing.setFees(updatedCourse.getFees());
         return courseRepository.save(existing);
     }
 
