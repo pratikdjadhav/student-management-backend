@@ -25,13 +25,13 @@ public class SecurityConfig {
             throws Exception {
         http
                 .cors(cors -> cors.configurationSource(request -> {
-    var config = new org.springframework.web.cors.CorsConfiguration();
-    config.addAllowedOriginPattern("*");
-    config.addAllowedMethod("*");
-    config.addAllowedHeader("*");
-    config.setAllowCredentials(false);
-    return config;
-}))
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.addAllowedOriginPattern("*");
+                    config.addAllowedMethod("*");
+                    config.addAllowedHeader("*");
+                    config.setAllowCredentials(false);
+                    return config;
+                }))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
